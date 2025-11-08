@@ -153,24 +153,32 @@
               <p class="sm:col-span-2 text-xs muted">Afeta somente a geração de <strong>E‑mail</strong> (tipo "e‑mail" ou quando sair e‑mail no "combo").</p>
             </div>
 
-            <div class="sm:col-span-2 grid sm:grid-cols-3 gap-4 p-3 rounded-xl surface">
+            <div class="sm:col-span-2 grid sm:grid-cols-[minmax(16rem,1fr)_auto_auto] gap-4 p-3 rounded-xl surface items-center">
               <div class="flex flex-col gap-1">
                 <span class="text-sm muted">Separador CSV</span>
-                <select id="csvSep" class="tap input rounded-xl px-3 py-2 min-w-[180px] sm:min-w-[200px]">
+                <select id="csvSep" class="tap input rounded-xl px-3 py-2 w-full">
                   <option value="auto">Auto (recomendado)</option>
                   <option value=",">Vírgula ,</option>
                   <option value=";">Ponto e vírgula ;</option>
                   <option value="\t">Tabulação \t</option>
                 </select>
               </div>
-              <label class="flex items-center gap-2">
-                <input id="csvBOM" type="checkbox" class="tap" checked>
-                <span class="text-sm muted">Compatibilidade Excel (UTF‑8 BOM)</span>
+                  <!-- Checkbox: Compatibilidade Excel -->
+            <div class="flex items-center gap-2 min-w-0">
+              <input id="csvBOM" type="checkbox" class="tap" checked>
+              <label for="csvBOM" class="text-sm muted cursor-pointer">
+                Compatibilidade Excel (UTF-8 BOM)
               </label>
-             <div class="flex items-center gap-2">
-                <input type="checkbox" id="forceNewTab" class="tap" />
-                <label for="forceNewTab" class="muted cursor-pointer">Forçar nova aba </label>
+            </div>
+
+                    <!-- Checkbox: Forçar nova aba -->
+              <div class="flex items-center gap-2 min-w-0">
+                <input id="forceNewTab" type="checkbox" class="tap">
+                <label for="forceNewTab" class="text-sm muted cursor-pointer">
+                  Forçar nova aba (fallback)
+                </label>
               </div>
+
 
             </div>
 
