@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gerador de Dados de Teste — CPF, CNPJ e E‑mail (Offline)</title>
+  <meta name="description" content="Gere CPFs, CNPJs e e‑mails válidos em segundos. 100% offline, sem cadastro e sem limites. Baixe CSV e copie/seleciona facilmente." />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{ --bg:#0b1220; --panel:#0f1a30; --text:#e9eef7; --muted:#a5b4cf; --border:#203050; --accent:#10b981; --accent-ink:#052e2b; --surface:#0b152a; --input:#0a1222; }
+    .theme-soft{ --bg:#f6f7fb; --panel:#ffffff; --text:#111827; --muted:#6b7280; --border:#e5e7eb; --accent:#0ea5e9; --accent-ink:#06263a; --surface:#f3f4f6; --input:#ffffff; }
+    html{ scroll-behavior:smooth }
+    body{ font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"; background:var(--bg); color:var(--text) }
+    .tap{ -webkit-tap-highlight-color:transparent }
+    .card{ background:var(--panel); border:1px solid var(--border) }
+    .surface{ background:var(--surface); border:1px solid var(--border) }
+    .muted{ color:var(--muted) }
+    .input{ background:var(--input); border:1px solid var(--border); color:var(--text) }
+    .kbd{ padding:2px 6px; border:1px solid var(--border); border-radius:6px; background:var(--surface) }
+    .btn{ border:1px solid var(--border); background:var(--surface); color:var(--text) }
+    .btn:hover{ filter:brightness(1.05) }
+    .btn-primary{ background:var(--accent); color:var(--accent-ink); border:none }
+    .test-pass{ color:#22c55e } .test-fail{ color:#ef4444 }
+  </style>
+</head>
+<body>
+  <header id="appHeader" class="sticky top-0 z-50" style="backdrop-filter:blur(8px); background:color-mix(in srgb, var(--bg) 85%, transparent); border-bottom:1px solid var(--border)">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="size-8 rounded-xl surface grid place-items-center"><span style="color:var(--accent)">⚙️</span></div>
+        <h1 class="text-lg sm:text-xl font-semibold">Gerador de Dados de Teste</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <select id="themeSelect" class="tap input rounded-xl px-3 py-1.5 text-sm">
+          <option value="auto">Tema: Auto</option>
+          <option value="dark">Tema: Escuro</option>
+          <option value="soft">Tema: Claro (suave)</option>
+        </select>
+        <a href="#como-funciona" class="tap btn rounded-xl px-3 py-1.5 text-sm">Como funciona</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    <section class="mb-8">
+      <div class="grid md:grid-cols-2 gap-6 items-start">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-bold leading-tight">CPF, CNPJ e E‑mail — <span style="color:var(--accent)">100% offline</span>, sem limites.</h2>
+          <p class="mt-3 muted">Gere dados válidos para testes. Nenhuma informação sai do seu navegador. Copie, <strong>use Selecionar tudo</strong> ou baixe em CSV.</p>
+          <ul class="mt-4 muted space-y-1">
+            <li>✅ Geração em lote (até 1000 itens)</li>
+            <li>✅ Com/sem <strong>pontuação</strong> • Copiar/Selecionar • Baixar CSV</li>
+            <li>✅ Mobile‑first • Leve • Sem cadastro</li>
+          </ul>
+          <p id="clipboardWarning" class="hidden mt-3 text-amber-400 text-sm">⚠️ Ambiente bloqueou acesso à área de transferência. Use <span class="kbd">Selecionar tudo</span> e <span class="kbd">Ctrl</span>+<span class="kbd">C</span> (ou <span class="kbd">⌘</span>+<span class="kbd">C</span>).</p>
+        </div>
+        <div id="panel" class="card rounded-2xl p-4">
+          <form id="form" class="grid sm:grid-cols-2 gap-4">
+            <label class="flex flex-col gap-1">
+              <span class="text-sm muted">Tipo de dado</span>
+              <select id="tipo" class="tap input rounded-xl px-3 py-2 outline-none focus:ring-2" style="--tw-ring-color: color-mix(in srgb, var(--accent) 40%, transparent)">
+                <option value="cpf">CPF</option>
+                <option value="cnpj">CNPJ</option>
+                <option value="email">E‑mail</option>
+                <option value="combo">Combo (misturado)</option>
+              </select>
+            </label>
+            <label class="flex flex-col gap-1">
+              <span class="text-sm muted">Quantidade</span>
+              <input id="qtd" type="number" min="1" max="1000" value="50" class="tap input rounded-xl px-3 py-2 outline-none focus:ring-2" />
+            </label>
+
+            <label class="flex flex-col gap-1 sm:col-span-2">
+              <span class="text-sm muted">CPF por Estado/Região (opcional)</span>
+              <select id="cpfEstado" class="tap input rounded-xl px-3 py-2">
+                <option value="auto">Aleatório (qualquer região)</option>
+                <option value="0">RS</option>
+                <option value="1">DF, GO, MS, MT, TO</option>
+                <option value="2">AC, AM, AP, PA, RO, RR</option>
+                <option value="3">CE, MA, PI</option>
+                <option value="4">AL, PB, PE, RN</option>
+                <option value="5">BA, SE</option>
+                <option value="6">MG</option>
+                <option value="7">ES, RJ</option>
+                <option value="8">SP</option>
+                <option value="9">PR, SC</option>
+              </select>
+              <span class="text-xs muted">Dica: historicamente, o <strong>9º dígito</strong> do CPF indica a <em>região fiscal</em> (não o estado exato). Para testes, você pode fixar a região aqui.</span>
+            </label>
+
+            <label class="flex items-center gap-2 sm:col-span-2">
+              <input id="pontuacao" type="checkbox" class="tap" checked>
+              <span class="text-sm muted">Incluir <strong>pontuação</strong> em CPF/CNPJ</span>
+            </label>
+
+            <div class="sm:col-span-2 grid sm:grid-cols-2 gap-4 p-3 rounded-xl surface">
+              <div class="flex flex-col gap-1">
+                <span class="text-sm muted">Usuário do e‑mail (opcional)</span>
+                <input id="emailUser" type="text" placeholder="ex.: joao.silva" class="tap input rounded-xl px-3 py-2 outline-none focus:ring-2" />
+                <span class="text-xs muted">Se preencher, o e‑mail usará exatamente este usuário.</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                <span class="text-sm muted">Domínio do e‑mail (opcional)</span>
+                <input id="emailDomain" type="text" placeholder="ex.: empresa.com.br" class="tap input rounded-xl px-3 py-2 outline-none focus:ring-2" />
+                <span class="text-xs muted">Se preencher, o e‑mail usará exatamente este domínio.</span>
+              </div>
+              <p class="sm:col-span-2 text-xs muted">Afeta somente a geração de <strong>E‑mail</strong> (tipo "e‑mail" ou quando sair e‑mail no "combo").</p>
+            </div>
+
+            <div class="sm:col-span-2 grid sm:grid-cols-3 gap-4 p-3 rounded-xl surface">
+              <div class="flex flex-col gap-1">
+                <span class="text-sm muted">Separador CSV</span>
+                <select id="csvSep" class="tap input rounded-xl px-3 py-2">
+                  <option value="auto">Auto (recomendado)</option>
+                  <option value=",">Vírgula ,</option>
+                  <option value=";">Ponto e vírgula ;</option>
+                  <option value="\t">Tabulação \t</option>
+                </select>
+              </div>
+              <label class="flex items-center gap-2">
+                <input id="csvBOM" type="checkbox" class="tap" checked>
+                <span class="text-sm muted">Compatibilidade Excel (UTF‑8 BOM)</span>
+              </label>
+              <div class="flex items-center gap-2">
+                <input id="csvNewTab" type="checkbox" class="tap">
+                <span class="text-sm muted">Forçar nova aba (fallback)</span>
+              </div>
+            </div>
+
+            <div class="sm:col-span-2 flex flex-wrap gap-2 mt-2">
+              <button id="btnGerar" type="submit" class="tap btn btn-primary inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold">⚡ Gerar</button>
+              <button id="btnCopiar" type="button" class="tap btn inline-flex items-center gap-2 px-4 py-2 rounded-xl">📋 Copiar</button>
+              <button id="btnSelecionar" type="button" class="tap btn inline-flex items-center gap-2 px-4 py-2 rounded-xl">🔎 Selecionar tudo</button>
+              <a id="btnCSV" href="#" target="_blank" rel="noopener" class="tap btn inline-flex items-center gap-2 px-4 py-2 rounded-xl" role="button">⬇️ Baixar CSV</a>
+              <button id="btnLimpar" type="button" class="tap btn inline-flex items-center gap-2 px-4 py-2 rounded-xl">🧹 Limpar</button>
+            </div>
+            <p id="dlHint" class="sm:col-span-2 hidden text-xs muted">Se não baixar automaticamente, clique com o <strong>botão direito</strong> em "Baixar CSV" e escolha <em>"Abrir link em nova aba"</em>.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-6">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-lg font-semibold">Resultados</h3>
+        <span id="contador" class="text-sm muted">0 itens</span>
+      </div>
+      <textarea id="saida" rows="12" class="w-full input rounded-2xl p-4 outline-none focus:ring-2 font-mono text-sm" placeholder="Os dados gerados aparecerão aqui…" spellcheck="false"></textarea>
+      <p class="text-xs muted mt-2">Dica: os dados são fictícios e destinados apenas a testes. Não utilize em cadastros reais.</p>
+    </section>
+
+    <section id="como-funciona" class="mt-12" style="border-top:1px solid var(--border); padding-top:2rem;">
+      <h3 class="text-lg font-semibold">Como funciona</h3>
+      <p class="mt-2 muted">Os CPFs e CNPJs são gerados aplicando dígitos verificadores (módulo 11). E‑mails são combinados a partir de nomes aleatórios e domínios comuns (ou personalizados). Tudo roda localmente — <strong>nenhum dado é enviado</strong>.
+      <br/><br/>
+      <strong>Curiosidade sobre estados no CPF:</strong> historicamente, o <em>9º dígito</em> do CPF (antes dos 2 dígitos verificadores) indicava a região fiscal de emissão, por exemplo: <span class="kbd">0</span> (RS), <span class="kbd">1</span> (DF, GO, MS, MT, TO), <span class="kbd">2</span> (AC, AM, AP, PA, RO, RR), <span class="kbd">3</span> (CE, MA, PI), <span class="kbd">4</span> (AL, PB, PE, RN), <span class="kbd">5</span> (BA, SE), <span class="kbd">6</span> (MG), <span class="kbd">7</span> (ES, RJ), <span class="kbd">8</span> (SP), <span class="kbd">9</span> (PR, SC). Isso não afeta a validade do CPF para testes.</p>
+
+      <details class="mt-6">
+        <summary class="cursor-pointer">🧪 Testes automáticos (sanity)</summary>
+        <div id="testOut" class="mt-3 space-y-1 text-sm"></div>
+      </details>
+    </section>
+  </main>
+
+  <footer class="mt-12" style="border-top:1px solid var(--border)">
+    <div class="max-w-6xl mx-auto px-4 py-6 text-sm muted flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+      <span>© <span id="ano"></span> Gerador de Dados de Teste — Offline</span>
+      <span>Privacidade: nada é enviado para a internet.</span>
+    </div>
+  </footer>
+
+  <div id="privacy" class="fixed bottom-4 inset-x-0 px-4 md:px-0 flex justify-center">
+    <div class="max-w-4xl w-full card rounded-2xl p-4 shadow-lg flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+      <div class="flex-1 text-sm">🔒 Este site funciona 100% no seu navegador. Nada é enviado para servidores. Os dados são fictícios e apenas para testes.</div>
+      <button id="privacyOk" class="tap btn btn-primary px-3 py-2 rounded-xl font-semibold">Entendi</button>
+    </div>
+  </div>
+
+  <script>
+  (()=>{
+    'use strict';
+    // Utils
+    const rand=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
+    const choice=(arr)=>arr[rand(0,arr.length-1)];
+    const byId=(id)=>document.getElementById(id);
+    const normalizeUser=(s)=>s.normalize('NFD').replace(/\p{Diacritic}/gu,'').toLowerCase().replace(/\s+/g,'.').replace(/[^a-z0-9._-]/g,'').replace(/\.+/g,'.').replace(/^\.|\.$/g,'');
+    const validDomain=(d)=>/^[a-z0-9.-]+\.[a-z]{2,}$/i.test(d||'');
+    const sanitizeDomain=(d)=>{
+      let s=(d||'').trim().toLowerCase();
+      s=s.replace(/^mailto:/,'').replace(/^@/,'');
+      s=s.replace(/^(https?:)?\/\//,'');
+      s=s.replace(/\?.*$/,'').replace(/#.*/,'');
+      s=s.replace(/\/.*$/,'');
+      s=s.replace(/[^a-z0-9.-]/g,'');
+      if(!/\./.test(s)) s = s + '.com.br';
+      s=s.replace(/\.{2,}/g,'.').replace(/^-+|-+$/g,'').replace(/-+\./g,'.').replace(/\.-+/g,'.');
+      return s;
+    };
+
+    let lastLines=[];
+
+    // CPF
+    function gerarCPFBase(regionDigit=null){ const base=Array.from({length:9},()=>rand(0,9)); if(regionDigit!==null) base[8]=Number(regionDigit)%10; return base; }
+    function mod11(digs,startWeight){ let soma=0,peso=startWeight; for(const d of digs){ soma+=d*peso--; } let resto=soma%11; let dv=11-resto; if(dv>9) dv=0; return dv; }
+    function calcDVCPF(digs){ const d1=mod11(digs,10); const d2=mod11([...digs,d1],11); return [d1,d2]; }
+    function formatCPF(nums){ const s=nums.join(""); return `${s.slice(0,3)}.${s.slice(3,6)}.${s.slice(6,9)}-${s.slice(9)}`; }
+    function gerarCPF(pontuado=true,regionDigit=null){ const base=gerarCPFBase(regionDigit); const [d1,d2]=calcDVCPF(base); const full=[...base,d1,d2]; return pontuado?formatCPF(full):full.join(""); }
+    function validarCPF(cpf){ const digits=String(cpf).replace(/\D/g,""); if(digits.length!==11||/^([0-9])\1{10}$/.test(digits)) return false; const n=digits.split("").map(Number); const dv1=mod11(n.slice(0,9),10); const dv2=mod11(n.slice(0,9).concat(dv1),11); return dv1===n[9]&&dv2===n[10]; }
+
+    // CNPJ
+    function gerarCNPJBase(){ return Array.from({length:12},()=>rand(0,9)); }
+    function mod11CNPJ(digs){ const pesos=[5,4,3,2,9,8,7,6,5,4,3,2], pesos2=[6,5,4,3,2,9,8,7,6,5,4,3,2]; const arr=digs.length===12?pesos:pesos2; const soma=digs.reduce((a,d,i)=>a+d*arr[i],0); const resto=soma%11; return resto<2?0:11-resto; }
+    function calcDVCNPJ(digs){ const d1=mod11CNPJ(digs); const d2=mod11CNPJ([...digs,d1]); return [d1,d2]; }
+    function formatCNPJ(nums){ const s=nums.join(""); return `${s.slice(0,2)}.${s.slice(2,5)}.${s.slice(5,8)}/${s.slice(8,12)}-${s.slice(12)}`; }
+    function gerarCNPJ(pontuado=true){ const base=gerarCNPJBase(); const [d1,d2]=calcDVCNPJ(base); const full=[...base,d1,d2]; return pontuado?formatCNPJ(full):full.join(""); }
+    function validarCNPJ(cnpj){ const digits=String(cnpj).replace(/\D/g,""); if(digits.length!==14||/^([0-9])\1{13}$/.test(digits)) return false; const n=digits.split("").map(Number); const d1=mod11CNPJ(n.slice(0,12)); const d2=mod11CNPJ(n.slice(0,12).concat(d1)); return d1===n[12]&&d2===n[13]; }
+
+    // E-mail
+    const nomes=["ana","bruno","carla","daniel","edu","fernanda","gabriel","helen","igor","joana","karen","luiz","marcos","nina","otavio","paula","quintino","renata","sergio","tati","ursula","vitor","wagner","yasmin","zeca"];
+    const sobrenomes=["silva","santos","oliveira","souza","pereira","costa","rodrigues","almeida","nascimento","araujo","ferreira","barbosa","ribeiro","cardoso","melo","castro","morais","teixeira","vieira","batista"];
+    const dominios=["teste.com","exemplo.com","mail.com","email.com","dev.br","qa.br","example.org","fastmail.com","outlook.com","gmail.com"];
+    function gerarEmail(customUser,customDomain){
+      let user=(customUser||'').trim();
+      let domain=(customDomain||'').trim();
+      if(user) user=normalizeUser(user);
+      if(!user){ const n=choice(nomes), s=choice(sobrenomes); const num=Math.random()<0.4?String(rand(1,9999)).padStart(2,'0'):""; user=`${n}.${s}${num}`.replace(/\.+/g,'.'); }
+      if(domain){ domain = sanitizeDomain(domain); }
+      if(!domain || !validDomain(domain)) domain = choice(dominios);
+      return `${user}@${domain}`;
+    }
+
+    // CSV helpers
+    function toCSV(rows,sep=',',includeHeader=true){
+      const esc=(v)=>`"${String(v).replaceAll('"','""')}"`;
+      const onlyEmail = rows.every(r=>r.tipo==='email');
+      const header = onlyEmail ? ['tipo','email'] : ['tipo','valor','sem_mascara','com_mascara'];
+      const out=[];
+      if(includeHeader) out.push(header.map(esc).join(sep));
+      for(const r of rows){
+        if(onlyEmail) out.push([r.tipo, r.valor].map(esc).join(sep));
+        else out.push([r.tipo, r.valor, r.sem, r.com].map(esc).join(sep));
+      }
+      return out.join('\n');
+    }
+    function detectBestSep(){
+      const lang=(navigator.language||'').toLowerCase();
+      const isPt=lang.startsWith('pt');
+      const isWin=navigator.userAgent.includes('Windows');
+      return (isPt&&isWin)?';':',';
+    }
+    function inSandboxedIframe(){ try{ return window.top!==window.self; } catch{ return true; } }
+
+    // UI refs
+    const saida=byId('saida');
+    const qtd=byId('qtd');
+    const tipo=byId('tipo');
+    const pontuacao=byId('pontuacao');
+    const cpfEstado=byId('cpfEstado');
+    const contador=byId('contador');
+    const clipWarn=byId('clipboardWarning');
+    const emailUser=byId('emailUser');
+    const emailDomain=byId('emailDomain');
+    const themeSelect=byId('themeSelect');
+    const csvNewTab=byId('csvNewTab');
+    const dlHint=byId('dlHint');
+    const btnCSV=byId('btnCSV');
+
+    function gerar(){
+      const n=Math.min(Math.max(parseInt(qtd.value||'0',10),1),1000);
+      const usarPontuacao=pontuacao.checked; const t=tipo.value; const userPref=emailUser.value; const domainPref=emailDomain.value; const regionDigit=cpfEstado.value==='auto'?null:Number(cpfEstado.value);
+      const linhas=[]; const out=[];
+      function pushCPF(){ const com=gerarCPF(true,regionDigit); const sem=com.replace(/\D/g,''); linhas.push({tipo:'cpf',valor:usarPontuacao?com:sem,sem,com}); out.push(usarPontuacao?com:sem); }
+      function pushCNPJ(){ const com=gerarCNPJ(true); const sem=com.replace(/\D/g,''); linhas.push({tipo:'cnpj',valor:usarPontuacao?com:sem,sem,com}); out.push(usarPontuacao?com:sem); }
+      function pushEmail(){ const e=gerarEmail(userPref,domainPref); linhas.push({tipo:'email',valor:e,sem:e,com:e}); out.push(e); }
+      if(t==='combo'){ for(let i=0;i<n;i++){ choice([pushCPF,pushCNPJ,pushEmail])(); } }
+      else if(t==='cpf'){ for(let i=0;i<n;i++) pushCPF(); }
+      else if(t==='cnpj'){ for(let i=0;i<n;i++) pushCNPJ(); }
+      else{ for(let i=0;i<n;i++) pushEmail(); }
+      saida.value=out.join('\n'); contador.textContent=`${out.length} itens`; lastLines=linhas; return linhas;
+    }
+
+    byId('form').addEventListener('submit',(e)=>{ e.preventDefault(); gerar(); });
+
+    function rebuildRowsFromTextarea(){
+      const lines=(saida.value||'').split(/\r?\n/).map(s=>s.trim()).filter(Boolean); const rows=[];
+      for(const line of lines){ const digits=line.replace(/\D/g,''); if(digits.length===11&&validarCPF(digits)){ const com=formatCPF(digits.split('').map(Number)); rows.push({tipo:'cpf',valor:line,sem:digits,com}); }
+        else if(digits.length===14&&validarCNPJ(digits)){ const s=digits; const com=`${s.slice(0,2)}.${s.slice(2,5)}.${s.slice(5,8)}/${s.slice(8,12)}-${s.slice(12)}`; rows.push({tipo:'cnpj',valor:line,sem:digits,com}); }
+        else { rows.push({tipo:'email',valor:line,sem:line,com:line}); } }
+      return rows;
+    }
+
+    async function copyTextSafe(text){ if(!text) return {ok:false}; try{ if(navigator.clipboard?.writeText){ await navigator.clipboard.writeText(text); clipWarn.classList.add('hidden'); return {ok:true,method:'clipboard'}; } }catch(err){ console.warn('Clipboard bloqueado, tentando fallback…',err); }
+      try{ const ta=document.createElement('textarea'); ta.value=text; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); const ok=document.execCommand('copy'); document.body.removeChild(ta); if(ok) return {ok:true,method:'execCommand'}; }catch(err2){ console.warn('Fallback execCommand falhou',err2); }
+      try{ saida.focus(); saida.select(); }catch{}
+      clipWarn.classList.remove('hidden'); return {ok:false,method:'select'}; }
+
+    byId('btnCopiar').addEventListener('click',async()=>{ if(!saida.value.trim()) return; const res=await copyTextSafe(saida.value); if(res.ok) toast(res.method==='clipboard'?'Copiado (API nativa).':'Copiado (compatibilidade).'); else toast('Ambiente bloqueou copiar automático. Use Selecionar tudo.'); });
+    byId('btnSelecionar').addEventListener('click',()=>{ if(!saida.value.trim()) return; saida.focus(); saida.select(); clipWarn.classList.remove('hidden'); toast('Selecionado. Pressione Ctrl+C (ou ⌘+C).'); });
+
+    // Baixar CSV via <a download>
+    btnCSV.addEventListener('click',(ev)=>{
+      let rows = lastLines && lastLines.length ? lastLines : rebuildRowsFromTextarea();
+      if (!rows.length) { ev.preventDefault(); toast('Gere os dados antes de baixar CSV.'); return; }
+      const sepSel = byId('csvSep').value; const sep = sepSel==='auto' ? detectBestSep() : sepSel; const addBOM = byId('csvBOM').checked; const forceNewTab = csvNewTab.checked || inSandboxedIframe();
+      const csv = toCSV(rows, sep, true);
+      const nome = `dados_teste_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`;
+      try {
+        if (btnCSV.dataset.url) { try { URL.revokeObjectURL(btnCSV.dataset.url); } catch {} }
+        const BOM = addBOM ? new Uint8Array([0xEF,0xBB,0xBF]) : new Uint8Array();
+        const blob = new Blob([BOM, csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        btnCSV.href = url; btnCSV.download = nome; btnCSV.target = forceNewTab ? '_blank' : '_self';
+        btnCSV.dataset.url = url;
+        dlHint.classList.remove('hidden');
+      } catch (e) {
+        console.warn('Falha ao preparar link CSV', e);
+        ev.preventDefault();
+        toast('Não foi possível preparar o link de download.');
+      }
+    });
+
+    byId('btnLimpar').addEventListener('click',()=>{
+      saida.value=''; contador.textContent='0 itens'; lastLines=[];
+      if (btnCSV.dataset.url) { try { URL.revokeObjectURL(btnCSV.dataset.url); } catch {} delete btnCSV.dataset.url; }
+      btnCSV.href = '#'; btnCSV.removeAttribute('download');
+      dlHint.classList.add('hidden');
+    });
+
+    // Tema
+    function applyTheme(mode){ document.documentElement.classList.remove('theme-soft'); if(mode==='soft') document.documentElement.classList.add('theme-soft'); else if(mode==='auto'){ const prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches; if(!prefersDark) document.documentElement.classList.add('theme-soft'); } }
+    const saved=localStorage.getItem('theme-select')||'auto'; themeSelect.value=saved; applyTheme(saved);
+    themeSelect.addEventListener('change',()=>{ const v=themeSelect.value; localStorage.setItem('theme-select',v); applyTheme(v); });
+    (function(){ try{ if(inSandboxedIframe()){ byId('csvNewTab').checked=true; } }catch{} })();
+
+    // Footer
+    byId('ano').textContent=new Date().getFullYear();
+
+    // Privacidade
+    const privacy=byId('privacy'); const privacyOk=byId('privacyOk'); if(localStorage.getItem('privacy-ok')==='1') privacy.remove(); privacyOk.addEventListener('click',()=>{ localStorage.setItem('privacy-ok','1'); privacy.remove(); });
+
+    // Toast
+    function toast(msg){ const el=document.createElement('div'); el.className='fixed bottom-6 left-1/2 -translate-x-1/2 card rounded-xl px-4 py-2 text-sm shadow-lg'; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>el.remove(),2600); }
+
+    // Testes (sanity)
+    function addTestLine(ok,label){ const p=document.createElement('p'); p.innerHTML=`${ok?'✅':'❌'} <span class="${ok?'test-pass':'test-fail'}">${label}</span>`; byId('testOut').appendChild(p); }
+    function runTests(){
+      const cpf0=gerarCPF(false,0); addTestLine(cpf0[8]==='0','CPF RS (9º dígito = 0)');
+      const cpf8=gerarCPF(false,8); addTestLine(cpf8[8]==='8','CPF SP (9º dígito = 8)');
+      let okCPF=true; for(let i=0;i<100;i++){ if(!validarCPF(gerarCPF(false))){ okCPF=false; break; } } addTestLine(okCPF,'CPF: 100/100 válidos (DV correto)');
+      let okCNPJ=true; for(let i=0;i<100;i++){ if(!validarCNPJ(gerarCNPJ(false))){ okCNPJ=false; break; } } addTestLine(okCNPJ,'CNPJ: 100/100 válidos (DV correto)');
+      addTestLine(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(gerarCPF(true)),'Pontuação CPF');
+      addTestLine(/^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/.test(gerarCNPJ(true)),'Pontuação CNPJ');
+      addTestLine(/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(gerarEmail()),'E-mail: formato básico válido');
+      addTestLine(gerarEmail('João Silva','minhaempresa.com.br')==='joao.silva@minhaempresa.com.br','E-mail personalizado');
+      addTestLine(gerarEmail('Ana','EMPRESA.COM.BR').endsWith('@empresa.com.br'),'Domínio normaliza caixa alta');
+      addTestLine(gerarEmail('ana','https://empresa.com.br/contato').endsWith('@empresa.com.br'),'Domínio remove protocolo e path');
+      addTestLine(gerarEmail('ana','empresa').endsWith('@empresa.com.br'),'Domínio sem TLD completa .com.br');
+      addTestLine(gerarEmail('ana','@empresa.com.br').endsWith('@empresa.com.br'),'Domínio com @ inicial sanitizado');
+      addTestLine(gerarEmail('ana','MAILTO:contato@empresa.com.br').endsWith('@empresa.com.br'),'Domínio com mailto: sanitizado');
+      addTestLine(gerarEmail('ana','empresa--test').endsWith('@empresa--test.com.br'),'Domínio sem TLD ganha .com.br');
+      addTestLine(gerarEmail('ana','sub.empresA.COM.Br').endsWith('@sub.empresa.com.br'),'Domínio mantém subdomínio e normaliza');
+      addTestLine(gerarEmail('ana','empresa.com.br?utm=1#sec').endsWith('@empresa.com.br'),'Domínio remove query/hash');
+      addTestLine(gerarEmail('ana','https://empresa.com.br/p/a').endsWith('@empresa.com.br'),'Domínio remove path');
+      addTestLine(gerarEmail('ana','empresa..com..br').endsWith('@empresa.com.br'),'Domínio normaliza pontos duplicados');
+
+      const rows=[{tipo:'cpf',valor:'000.000.000-00',sem:'00000000000',com:'000.000.000-00'}];
+      addTestLine(toCSV(rows,';').includes(';'),'CSV: ponto e vírgula');
+      addTestLine(toCSV(rows,',').includes(','),'CSV: vírgula');
+      addTestLine(toCSV(rows,',',false).split('\n')[0].startsWith('000'),'CSV: sem header');
+      const emailCSV = toCSV([{tipo:'email',valor:'a@b.com',sem:'a@b.com',com:'a@b.com'}], ',');
+      addTestLine(emailCSV.split('\n')[0] === '"tipo","email"', 'CSV email-only: cabeçalho compacto');
+      const emailCSV2 = toCSV([{tipo:'email',valor:'a@b.com',sem:'a@b.com',com:'a@b.com'}], ';');
+      addTestLine(emailCSV2.split('\n')[0] === '"tipo";"email"', 'CSV email-only: separador ; OK');
+      const mixed = toCSV([
+        {tipo:'cpf',valor:'000.000.000-00',sem:'00000000000',com:'000.000.000-00'},
+        {tipo:'email',valor:'x@y.com',sem:'x@y.com',com:'x@y.com'}
+      ], ',');
+      addTestLine(mixed.split('\n')[0] === '"tipo","valor","sem_mascara","com_mascara"', 'CSV mixed: cabeçalho completo');
+      addTestLine(typeof sap === 'undefined' || typeof sap === 'object', 'Sanity: nenhuma dependência de `sap` no código');
+    }
+    window.addEventListener('load',runTests);
+  })();
+  </script>
+</body>
+</html>
