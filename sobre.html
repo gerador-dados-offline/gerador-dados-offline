@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sobre — GerarDados</title>
+  <meta name="description" content="Saiba mais sobre o GerarDados: ferramenta 100% offline para gerar CPFs, CNPJs e e-mails válidos para testes." />
+  <link rel="canonical" href="https://gerardados.com.br/sobre.html">
+  <!-- (Opcional) Cole aqui sua meta de verificação do Google Search Console, se você tiver -->
+  <!-- (Opcional) Cole aqui seu Google Analytics (GA4), se você já criou -->
+  <style>
+    :root{ --bg:#0b1220; --panel:#0f1a30; --text:#e9eef7; --muted:#a5b4cf; --border:#203050; --accent:#10b981; --accent-ink:#052e2b; }
+    *{ box-sizing:border-box } html{ scroll-behavior:smooth }
+    body{ margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; background:var(--bg); color:var(--text) }
+    .wrap{ max-width:960px; margin:0 auto; padding:24px }
+    .nav{ display:flex; gap:12px; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--border) }
+    .btn{ display:inline-flex; gap:8px; align-items:center; padding:10px 14px; border-radius:12px; border:1px solid var(--border); background:#0b152a; color:var(--text); text-decoration:none }
+    .btn:hover{ filter:brightness(1.05) }
+    .hero{ padding:28px; border:1px solid var(--border); border-radius:16px; background:#0f1a30; margin-top:18px }
+    .muted{ color:var(--muted) }
+    .section{ margin-top:28px; border-top:1px solid var(--border); padding-top:24px }
+    .footer{ margin-top:36px; border-top:1px solid var(--border); padding:18px 0; font-size:14px; color:var(--muted) }
+    a{ color:var(--accent) }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- topo com navegação -->
+    <nav class="nav">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:20px">⚙️</span>
+        <strong>GerarDados</strong>
+      </div>
+      <div style="display:flex;gap:8px">
+        <a class="btn" href="/">Início</a>
+        <a class="btn" href="/sobre.html" aria-current="page">Sobre</a>
+      </div>
+    </nav>
+
+    <!-- bloco de destaque -->
+    <header class="hero">
+      <h1 style="margin:0 0 8px 0">Sobre o GerarDados</h1>
+      <p class="muted" style="margin:0">Ferramenta 100% offline para gerar CPFs, CNPJs e e-mails válidos para testes, com exportação CSV e modo escuro/claro.</p>
+    </header>
+
+    <!-- conteúdo principal -->
+    <section class="section">
+      <h2>O que é</h2>
+      <p>O <strong>GerarDados</strong> foi criado para facilitar a vida de quem precisa <em>testar sistemas</em> e formulários sem expor dados reais. Tudo roda diretamente no seu navegador — <strong>nenhuma informação é enviada para servidores</strong>.</p>
+    </section>
+
+    <section class="section">
+      <h2>Como funciona</h2>
+      <ul>
+        <li>CPF/CNPJ: geração com dígitos verificadores (módulo 11) e <em>pontuação opcional</em>.</li>
+        <li>E-mail: gera nomes realistas e permite <em>definir usuário e domínio</em>.</li>
+        <li>Exportação: baixa CSV com fallback (abrir em nova aba) para máxima compatibilidade.</li>
+        <li>Privacidade: 100% local, sem coleta de dados.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Perguntas frequentes</h2>
+      <details>
+        <summary>Posso usar esses dados em cadastros reais?</summary>
+        <p>Não. Os dados são <strong>fictícios</strong> e servem apenas para testes.</p>
+      </details>
+      <details>
+        <summary>Funciona no celular?</summary>
+        <p>Sim. O site é responsivo e funciona em navegadores modernos (Chrome, Firefox, Edge, Safari).</p>
+      </details>
+      <details>
+        <summary>Há versão Pro?</summary>
+        <p>Em breve. A ideia é oferecer geração em lote ampliada e recursos avançados.</p>
+      </details>
+    </section>
+
+    <footer class="footer">
+      <div>© <span id="ano"></span> GerarDados.com.br — Todos os direitos reservados.</div>
+      <div>Contato: <a href="mailto:contato@gerardados.com.br">contato@gerardados.com.br</a></div>
+    </footer>
+  </div>
+
+  <script>
+    // atualiza o ano no rodapé
+    document.getElementById('ano').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
