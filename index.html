@@ -153,7 +153,8 @@
               <p class="sm:col-span-2 text-xs muted">Afeta somente a geração de <strong>E‑mail</strong> (tipo "e‑mail" ou quando sair e‑mail no "combo").</p>
             </div>
 
-            <div class="sm:col-span-2 grid sm:grid-cols-[minmax(16rem,1fr)_auto_auto] gap-4 p-3 rounded-xl surface items-center">
+              <div class="sm:col-span-2 grid sm:grid-cols-[1fr_auto_auto] gap-6 p-3 rounded-xl surface items-center">
+              <!-- Separador CSV -->
               <div class="flex flex-col gap-1">
                 <span class="text-sm muted">Separador CSV</span>
                 <select id="csvSep" class="tap input rounded-xl px-3 py-2 w-full">
@@ -163,24 +164,24 @@
                   <option value="\t">Tabulação \t</option>
                 </select>
               </div>
-                  <!-- Checkbox: Compatibilidade Excel -->
-            <div class="flex items-center gap-2 min-w-0">
-              <input id="csvBOM" type="checkbox" class="tap" checked>
-              <label for="csvBOM" class="text-sm muted cursor-pointer">
-                Compatibilidade Excel (UTF-8 BOM)
-              </label>
-            </div>
-
-                    <!-- Checkbox: Forçar nova aba -->
+            
+              <!-- Checkbox: Excel -->
+              <div class="flex items-center gap-2 min-w-0">
+                <input id="csvBOM" type="checkbox" class="tap" checked>
+                <label for="csvBOM" class="text-sm muted cursor-pointer whitespace-nowrap">
+                  Compatibilidade Excel (UTF-8 BOM)
+                </label>
+              </div>
+            
+              <!-- Checkbox: Fallback -->
               <div class="flex items-center gap-2 min-w-0">
                 <input id="forceNewTab" type="checkbox" class="tap">
-                <label for="forceNewTab" class="text-sm muted cursor-pointer">
+                <label for="forceNewTab" class="text-sm muted cursor-pointer whitespace-nowrap">
                   Forçar nova aba (fallback)
                 </label>
               </div>
-
-
             </div>
+
 
             <div class="sm:col-span-2 flex flex-wrap gap-2 mt-2">
               <button id="btnGerar" type="submit" class="tap btn btn-primary inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold">⚡ Gerar</button>
