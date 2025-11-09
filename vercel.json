@@ -1,0 +1,27 @@
+{
+  "redirects": [
+    {
+      "source": "http://(.*)",
+      "destination": "https://gerardados.com.br/:splat",
+      "permanent": true
+    },
+    {
+      "source": "https://www.gerardados.com.br/(.*)",
+      "destination": "https://gerardados.com.br/:splat",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "clipboard-read=(), clipboard-write=()" },
+        { "key": "Cache-Control", "value": "public, max-age=3600, s-maxage=86400" }
+      ]
+    }
+  ]
+}
