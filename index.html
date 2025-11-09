@@ -1,25 +1,31 @@
 <!doctype html>
 <html lang="pt-br">
 <head>
+  <!-- Schema.org -->
   <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "GerarDados",
-  "operatingSystem": "Web",
-  "applicationCategory": "DeveloperApplication",
-  "description": "Ferramenta 100% offline para gerar CPFs, CNPJs e e-mails válidos para testes, com exportação CSV.",
-  "url": "https://gerardados.com.br/",
-  "image": "https://gerardados.com.br/icon.png",
-  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "BRL" }
-}
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "GerarDados",
+    "operatingSystem": "Web",
+    "applicationCategory": "DeveloperApplication",
+    "description": "Ferramenta 100% offline para gerar CPFs, CNPJs e e-mails válidos para testes, com exportação CSV.",
+    "url": "https://gerardados.com.br/",
+    "image": "https://gerardados.com.br/icon.png",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "BRL" }
+  }
   </script>
 
-  <meta name="description" content="Gerador de dados 100% offline — CPF, CNPJ e e-mails válidos para testes, com exportação CSV e modo escuro.">
+  <!-- SEO -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gerador de Dados de Teste — CPF, CNPJ e E-mail (Offline)</title>
+  <meta name="description" content="Gere CPFs, CNPJs e e-mails válidos em segundos. 100% offline, sem cadastro e sem limites. Baixe CSV e copie/seleciona facilmente.">
   <meta name="keywords" content="gerar cpf, gerador cpf cnpj, e-mail teste, dados fictícios, gerador de dados online, csv">
   <meta name="author" content="GerarDados.com.br">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://gerardados.com.br/">
+  <meta name="theme-color" content="#0f172a" />
 
   <!-- Social -->
   <meta property="og:title" content="GerarDados — Gerador de CPF, CNPJ e e-mails válidos para teste">
@@ -32,16 +38,13 @@
   <meta name="twitter:description" content="Gerador de CPFs, CNPJs e e-mails válidos — 100% offline, rápido e gratuito.">
   <meta name="twitter:image" content="https://gerardados.com.br/icon.png">
 
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gerador de Dados de Teste — CPF, CNPJ e E-mail (Offline)</title>
-  <meta name="theme-color" content="#0f172a" />
-
+  <!-- Fonts + Tailwind -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Styles -->
   <style>
     :root{ --bg:#0b1220; --panel:#0f1a30; --text:#e9eef7; --muted:#a5b4cf; --border:#203050; --accent:#10b981; --accent-ink:#052e2b; --surface:#0b152a; --input:#0a1222; }
     .theme-soft{ --bg:#f6f7fb; --panel:#ffffff; --text:#111827; --muted:#6b7280; --border:#e5e7eb; --accent:#0ea5e9; --accent-ink:#06263a; --surface:#f3f4f6; --input:#ffffff; }
@@ -57,17 +60,22 @@
     .btn:hover{ filter:brightness(1.05) }
     .btn-primary{ background:var(--accent); color:var(--accent-ink); border:none }
     .test-pass{ color:#22c55e } .test-fail{ color:#ef4444 }
+
+    /* Layout estável da linha de CSV (funciona em qualquer Tailwind) */
+    .controls-row{ display:grid; grid-template-columns: 1fr auto auto; gap:1.5rem; align-items:center; }
+    @media (max-width: 640px){ .controls-row{ grid-template-columns: 1fr; } }
+    .nowrap{ white-space: nowrap; }
   </style>
 
-  <!-- Google tag (gtag.js) -->
+  <!-- GA -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7HM41B2WRY"></script>
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date()); gtag('config', 'G-7HM41B2WRY');
+    window.dataLayer=window.dataLayer||[]; function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date()); gtag('config','G-7HM41B2WRY');
   </script>
 </head>
 <body>
+  <!-- Header -->
   <header id="appHeader" class="sticky top-0 z-50" style="backdrop-filter:blur(8px); background:color-mix(in srgb, var(--bg) 85%, transparent); border-bottom:1px solid var(--border)">
     <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -86,6 +94,7 @@
     </div>
   </header>
 
+  <!-- Main -->
   <main class="max-w-6xl mx-auto px-4 py-8">
     <section class="mb-8">
       <div class="grid md:grid-cols-2 gap-6 items-start">
@@ -102,7 +111,7 @@
 
         <div id="panel" class="card rounded-2xl p-4">
           <form id="form" class="grid sm:grid-cols-2 gap-4">
-
+            <!-- Tipo / Quantidade -->
             <label class="flex flex-col gap-1">
               <span class="text-sm muted">Tipo de dado</span>
               <select id="tipo" class="tap input rounded-xl px-3 py-2 outline-none focus:ring-2" style="--tw-ring-color: color-mix(in srgb, var(--accent) 40%, transparent)">
@@ -118,72 +127,85 @@
               <input id="qtd" type="number" min="1" max="1000" value="50" class="tap input rounded-xl px-3 py-2 outline-none focus:ring-2" />
             </label>
 
+            <!-- Região do CPF -->
             <label class="flex flex-col gap-1 sm:col-span-2">
               <span class="text-sm muted">CPF por Estado/Região (opcional)</span>
               <select id="cpfEstado" class="tap input rounded-xl px-3 py-2">
                 <option value="auto">Aleatório (qualquer região)</option>
-                <option value="0">RS</option>
-                <option value="1">DF, GO, MS, MT, TO</option>
-                <option value="2">AC, AM, AP, PA, RO, RR</option>
-                <option value="3">CE, MA, PI</option>
-                <option value="4">AL, PB, PE, RN</option>
-                <option value="5">BA, SE</option>
-                <option value="6">MG</option>
-                <option value="7">ES, RJ</option>
-                <option value="8">SP</option>
-                <option value="9">PR, SC</option>
+                <option value="0">RS</option><option value="1">DF, GO, MS, MT, TO</option>
+                <option value="2">AC, AM, AP, PA, RO, RR</option><option value="3">CE, MA, PI</option>
+                <option value="4">AL, PB, PE, RN</option><option value="5">BA, SE</option>
+                <option value="6">MG</option><option value="7">ES, RJ</option>
+                <option value="8">SP</option><option value="9">PR, SC</option>
               </select>
-              <span class="text-xs muted">Dica: historicamente, o <strong>9º dígito</strong> do CPF indica a <em>região fiscal</em> (não o estado exato). Para testes, você pode fixar a região aqui.</span>
+              <span class="text-xs muted">Dica: historicamente, o <strong>9º dígito</strong> do CPF indica a <em>região fiscal</em> (não o estado exato).</span>
             </label>
 
+            <!-- Pontuação -->
             <label class="flex items-center gap-2 sm:col-span-2">
               <input id="pontuacao" type="checkbox" class="tap" checked>
               <span class="text-sm muted">Incluir <strong>pontuação</strong> em CPF/CNPJ</span>
             </label>
 
-            <!-- Linha: Separador CSV + Excel + Fallback -->
-            <div class="sm:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-4 p-3 rounded-xl surface items-center">
-              <!-- Coluna 1 -->
+            <!-- Preferências de e-mail -->
+            <div class="sm:col-span-2 grid sm:grid-cols-2 gap-4 p-3 rounded-xl surface">
+              <div class="flex flex-col gap-1">
+                <span class="text-sm muted">Usuário do e-mail (opcional)</span>
+                <input id="emailUser" type="text" placeholder="ex.: joao.silva" class="tap input rounded-xl px-3 py-2 outline-none focus:ring-2" />
+                <span class="text-xs muted">Se preencher, o e-mail usará exatamente este usuário.</span>
+              </div>
+              <div class="flex flex-col gap-1">
+                <span class="text-sm muted">Domínio do e-mail (opcional)</span>
+                <input id="emailDomain" type="text" placeholder="ex.: empresa.com.br" class="tap input rounded-xl px-3 py-2 outline-none focus:ring-2" />
+                <span class="text-xs muted">Se preencher, o e-mail usará exatamente este domínio.</span>
+              </div>
+              <p class="sm:col-span-2 text-xs muted">Afeta somente a geração de <strong>E-mail</strong> (tipo "e-mail" ou quando sair e-mail no "combo").</p>
+            </div>
+
+            <!-- Linha: CSV -->
+            <div class="sm:col-span-2 controls-row p-3 rounded-xl surface">
+              <!-- Separador -->
               <div class="flex flex-col gap-1">
                 <span class="text-sm muted">Separador CSV</span>
-                <select id="csvSep" class="tap input rounded-xl px-3 py-2 w-full">
+                <select id="csvSep" class="tap input rounded-xl px-3 py-2" style="min-width:14rem">
                   <option value="auto">Auto (recomendado)</option>
                   <option value=",">Vírgula ,</option>
                   <option value=";">Ponto e vírgula ;</option>
                   <option value="\t">Tabulação \t</option>
                 </select>
               </div>
-              <!-- Coluna 2 -->
+              <!-- Excel -->
               <div class="flex items-center gap-2 min-w-0">
                 <input id="csvBOM" type="checkbox" class="tap" checked>
-                <label for="csvBOM" class="text-sm muted cursor-pointer whitespace-nowrap">
+                <label for="csvBOM" class="text-sm muted cursor-pointer nowrap">
                   Compatibilidade Excel (UTF-8 BOM)
                 </label>
               </div>
-              <!-- Coluna 3 -->
+              <!-- Fallback -->
               <div class="flex items-center gap-2 min-w-0">
                 <input id="forceNewTab" type="checkbox" class="tap">
-                <label for="forceNewTab" class="text-sm muted cursor-pointer whitespace-nowrap">
+                <label for="forceNewTab" class="text-sm muted cursor-pointer nowrap">
                   Forçar nova aba (fallback)
                 </label>
               </div>
             </div>
 
+            <!-- Ações -->
             <div class="sm:col-span-2 flex flex-wrap gap-2 mt-2">
               <button id="btnGerar" type="submit" class="tap btn btn-primary inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold">⚡ Gerar</button>
               <button id="btnCopiar" type="button" class="tap btn inline-flex items-center gap-2 px-4 py-2 rounded-xl">📋 Copiar</button>
               <button id="btnSelecionar" type="button" class="tap btn inline-flex items-center gap-2 px-4 py-2 rounded-xl">🔎 Selecionar tudo</button>
-              <!-- Agora é BUTTON (não <a>) -->
               <button id="btnCSV" type="button" class="tap btn inline-flex items-center gap-2 px-4 py-2 rounded-xl">⬇️ Baixar CSV</button>
               <button id="btnLimpar" type="button" class="tap btn inline-flex items-center gap-2 px-4 py-2 rounded-xl">🧹 Limpar</button>
             </div>
 
-            <p id="dlHint" class="sm:col-span-2 hidden text-xs muted">Se não baixar automaticamente, marque “Forçar nova aba (fallback)” e tente novamente.</p>
+            <p id="dlHint" class="sm:col-span-2 hidden text-xs muted">Se o navegador bloquear, marque “Forçar nova aba (fallback)” e tente novamente.</p>
           </form>
         </div>
       </div>
     </section>
 
+    <!-- Resultados -->
     <section class="mt-6">
       <div class="flex items-center justify-between mb-2">
         <h3 class="text-lg font-semibold">Resultados</h3>
@@ -193,11 +215,11 @@
       <p class="text-xs muted mt-2">Dica: os dados são fictícios e destinados apenas a testes. Não utilize em cadastros reais.</p>
     </section>
 
+    <!-- Como funciona -->
     <section id="como-funciona" class="mt-12" style="border-top:1px solid var(--border); padding-top:2rem;">
       <h3 class="text-lg font-semibold">Como funciona</h3>
-      <p class="mt-2 muted">Os CPFs e CNPJs são gerados aplicando dígitos verificadores (módulo 11). E-mails são combinados a partir de nomes aleatórios e domínios comuns (ou personalizados). Tudo roda localmente — <strong>nenhum dado é enviado</strong>.
-      <br/><br/>
-      <strong>Curiosidade sobre estados no CPF:</strong> historicamente, o <em>9º dígito</em> do CPF (antes dos 2 dígitos verificadores) indicava a região fiscal de emissão, por exemplo: <span class="kbd">0</span> (RS), <span class="kbd">1</span> (DF, GO, MS, MT, TO), <span class="kbd">2</span> (AC, AM, AP, PA, RO, RR), <span class="kbd">3</span> (CE, MA, PI), <span class="kbd">4</span> (AL, PB, PE, RN), <span class="kbd">5</span> (BA, SE), <span class="kbd">6</span> (MG), <span class="kbd">7</span> (ES, RJ), <span class="kbd">8</span> (SP), <span class="kbd">9</span> (PR, SC). Isso não afeta a validade do CPF para testes.</p>
+      <p class="mt-2 muted">Os CPFs e CNPJs são gerados aplicando dígitos verificadores (módulo 11). E-mails são combinados a partir de nomes aleatórios e domínios comuns (ou personalizados). Tudo roda localmente — <strong>nenhum dado é enviado</strong>.</p>
+      <p class="mt-2 muted"><strong>Curiosidade sobre estados no CPF:</strong> historicamente, o <em>9º dígito</em> do CPF indicava a região fiscal de emissão: 0 (RS), 1 (DF, GO, MS, MT, TO), 2 (AC, AM, AP, PA, RO, RR), 3 (CE, MA, PI), 4 (AL, PB, PE, RN), 5 (BA, SE), 6 (MG), 7 (ES, RJ), 8 (SP), 9 (PR, SC). Isso não afeta a validade para testes.</p>
 
       <details class="mt-6">
         <summary class="cursor-pointer">🧪 Testes automáticos (sanity)</summary>
@@ -206,6 +228,7 @@
     </section>
   </main>
 
+  <!-- Footer -->
   <footer class="mt-12" style="border-top:1px solid var(--border)">
     <div class="max-w-6xl mx-auto px-4 py-6 text-sm muted flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
       <span>© <span id="ano"></span> GerarDados.com.br — Offline</span>
@@ -218,6 +241,7 @@
     </div>
   </footer>
 
+  <!-- Aviso privacidade -->
   <div id="privacy" class="fixed bottom-4 inset-x-0 px-4 md:px-0 flex justify-center">
     <div class="max-w-4xl w-full card rounded-2xl p-4 shadow-lg flex flex-col sm:flex-row gap-3 items-start sm:items-center">
       <div class="flex-1 text-sm">🔒 Este site funciona 100% no seu navegador. Nada é enviado para servidores. Os dados são fictícios e apenas para testes.</div>
@@ -225,6 +249,7 @@
     </div>
   </div>
 
+  <!-- Scripts -->
   <script>
   (()=>{
     'use strict';
@@ -238,8 +263,7 @@
     const sanitizeDomain=(d)=>{
       let s=(d||'').trim().toLowerCase();
       s=s.replace(/^mailto:/,'').replace(/^@/,'');
-      s=s.replace(/^(https?:)?\/\//,'');
-      s=s.replace(/\?.*$/,'').replace(/#.*/,'');
+      s=s.replace(/^(https?:)?\/\//,'').replace(/\?.*$/,'').replace(/#.*/,'');
       s=s.replace(/\/.*$/,'');
       s=s.replace(/[^a-z0-9.-]/g,'');
       if(!/\./.test(s)) s = s + '.com.br';
@@ -301,23 +325,20 @@
     function inSandboxedIframe(){ try{ return window.top!==window.self; } catch{ return true; } }
 
     // UI refs
-    const saida=byId('saida');
-    const qtd=byId('qtd');
-    const tipo=byId('tipo');
-    const pontuacao=byId('pontuacao');
-    const cpfEstado=byId('cpfEstado');
-    const contador=byId('contador');
-    const clipWarn=byId('clipboardWarning');
-    const emailUser=byId('emailUser');
-    const emailDomain=byId('emailDomain');
-    const themeSelect=byId('themeSelect');
-    const dlHint=byId('dlHint');
-    const btnCSV=byId('btnCSV');                 // agora é <button>
-    const csvForceNewTab = byId('forceNewTab');  // id correto!
+    const saida=byId('saida'); const qtd=byId('qtd'); const tipo=byId('tipo');
+    const pontuacao=byId('pontuacao'); const cpfEstado=byId('cpfEstado');
+    const contador=byId('contador'); const clipWarn=byId('clipboardWarning');
+    const emailUser=byId('emailUser'); const emailDomain=byId('emailDomain');
+    const themeSelect=byId('themeSelect'); const dlHint=byId('dlHint');
+    const btnCSV=byId('btnCSV'); const csvForceNewTab=byId('forceNewTab');
 
+    // Geração
     function gerar(){
       const n=Math.min(Math.max(parseInt(qtd.value||'0',10),1),1000);
-      const usarPontuacao=pontuacao.checked; const t=tipo.value; const userPref=emailUser?.value||''; const domainPref=emailDomain?.value||''; const regionDigit=cpfEstado.value==='auto'?null:Number(cpfEstado.value);
+      const usarPontuacao=pontuacao.checked;
+      const t=tipo.value;
+      const userPref=emailUser?.value||''; const domainPref=emailDomain?.value||'';
+      const regionDigit=cpfEstado.value==='auto'?null:Number(cpfEstado.value);
       const linhas=[]; const out=[];
       function pushCPF(){ const com=gerarCPF(true,regionDigit); const sem=com.replace(/\D/g,''); linhas.push({tipo:'cpf',valor:usarPontuacao?com:sem,sem,com}); out.push(usarPontuacao?com:sem); }
       function pushCNPJ(){ const com=gerarCNPJ(true); const sem=com.replace(/\D/g,''); linhas.push({tipo:'cnpj',valor:usarPontuacao?com:sem,sem,com}); out.push(usarPontuacao?com:sem); }
@@ -328,9 +349,9 @@
       else{ for(let i=0;i<n;i++) pushEmail(); }
       saida.value=out.join('\n'); contador.textContent=`${out.length} itens`; lastLines=linhas; return linhas;
     }
-
     byId('form').addEventListener('submit',(e)=>{ e.preventDefault(); gerar(); });
 
+    // Reconstruir a partir do textarea (para exportar mesmo após edições manuais)
     function rebuildRowsFromTextarea(){
       const lines=(saida.value||'').split(/\r?\n/).map(s=>s.trim()).filter(Boolean); const rows=[];
       for(const line of lines){
@@ -342,35 +363,21 @@
       return rows;
     }
 
+    // Copiar/Selecionar
     async function copyTextSafe(text){
       if(!text) return {ok:false};
-      try{
-        if(navigator.clipboard?.writeText){
-          await navigator.clipboard.writeText(text);
-          clipWarn.classList.add('hidden');
-          return {ok:true,method:'clipboard'};
-        }
-      }catch(err){ console.warn('Clipboard bloqueado, tentando fallback…',err); }
+      try{ if(navigator.clipboard?.writeText){ await navigator.clipboard.writeText(text); clipWarn.classList.add('hidden'); return {ok:true,method:'clipboard'}; } }
+      catch(err){ console.warn('Clipboard bloqueado',err); }
       try{
         const ta=document.createElement('textarea'); ta.value=text; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.opacity='0';
         document.body.appendChild(ta); ta.select(); const ok=document.execCommand('copy'); document.body.removeChild(ta);
         if(ok) return {ok:true,method:'execCommand'};
-      }catch(err2){ console.warn('Fallback execCommand falhou',err2); }
+      }catch(err2){ console.warn('execCommand falhou',err2); }
       try{ saida.focus(); saida.select(); }catch{}
       clipWarn.classList.remove('hidden'); return {ok:false,method:'select'};
     }
-
-    byId('btnCopiar').addEventListener('click',async()=>{
-      if(!saida.value.trim()) return;
-      const res=await copyTextSafe(saida.value);
-      if(res.ok) toast(res.method==='clipboard'?'Copiado (API nativa).':'Copiado (compatibilidade).');
-      else toast('Ambiente bloqueou copiar automático. Use Selecionar tudo.');
-    });
-    byId('btnSelecionar').addEventListener('click',()=>{
-      if(!saida.value.trim()) return;
-      saida.focus(); saida.select(); clipWarn.classList.remove('hidden');
-      toast('Selecionado. Pressione Ctrl+C (ou ⌘+C).');
-    });
+    byId('btnCopiar').addEventListener('click',async()=>{ if(!saida.value.trim()) return; const r=await copyTextSafe(saida.value); if(r.ok) toast(r.method==='clipboard'?'Copiado (API nativa).':'Copiado (compatibilidade).'); else toast('Use Selecionar tudo e Ctrl+C (ou ⌘+C).'); });
+    byId('btnSelecionar').addEventListener('click',()=>{ if(!saida.value.trim()) return; saida.focus(); saida.select(); clipWarn.classList.remove('hidden'); toast('Selecionado. Pressione Ctrl+C (ou ⌘+C).'); });
 
     // Download CSV robusto
     function csvToBlob(csv, addBOM){
@@ -385,63 +392,39 @@
     }
     function downloadBlob(blob, filename, forceNewTab){
       const url = URL.createObjectURL(blob);
-      if(forceNewTab){
-        window.open(url, '_blank', 'noopener,noreferrer');
-        setTimeout(()=>URL.revokeObjectURL(url), 2000);
-        return;
-      }
-      const a=document.createElement('a');
-      a.href=url; a.download=filename; a.rel='noopener'; a.style.display='none';
-      document.body.appendChild(a); a.click();
-      setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); }, 0);
+      if(forceNewTab){ window.open(url,'_blank','noopener,noreferrer'); setTimeout(()=>URL.revokeObjectURL(url),2000); return; }
+      const a=document.createElement('a'); a.href=url; a.download=filename; a.rel='noopener'; a.style.display='none';
+      document.body.appendChild(a); a.click(); setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); }, 0);
     }
-
-    btnCSV.addEventListener('click',(ev)=>{
+    byId('btnCSV').addEventListener('click',(ev)=>{
       ev.preventDefault();
       const rows = lastLines && lastLines.length ? lastLines : rebuildRowsFromTextarea();
-      if (!rows.length) { toast('Gere os dados antes de baixar CSV.'); return; }
-
-      const sepSel = byId('csvSep').value;
-      const sep = sepSel==='auto' ? detectBestSep() : sepSel;
-      const addBOM = byId('csvBOM').checked;
-      const forceNewTab = !!csvForceNewTab?.checked || inSandboxedIframe();
-
+      if(!rows.length){ toast('Gere os dados antes de baixar CSV.'); return; }
+      const sepSel = byId('csvSep').value; const sep = (sepSel==='auto') ? detectBestSep() : sepSel;
+      const addBOM = byId('csvBOM').checked; const forceNewTab = !!csvForceNewTab?.checked || inSandboxedIframe();
       const csv = toCSV(rows, sep, true);
       const nome = `dados_teste_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.csv`;
-
-      try{
-        const blob = csvToBlob(csv, addBOM);
-        downloadBlob(blob, nome, forceNewTab);
-        dlHint.classList.toggle('hidden', !forceNewTab);
-      }catch(e){
-        console.warn('Falha ao preparar link CSV', e);
-        toast('Não foi possível preparar o download.');
-      }
+      try{ downloadBlob(csvToBlob(csv, addBOM), nome, forceNewTab); dlHint.classList.toggle('hidden', !forceNewTab); }
+      catch(e){ console.warn('Falha CSV', e); toast('Não foi possível preparar o download.'); }
     });
 
-    byId('btnLimpar').addEventListener('click',()=>{
-      saida.value=''; contador.textContent='0 itens'; lastLines=[];
-      dlHint.classList.add('hidden');
-    });
+    // Limpar
+    byId('btnLimpar').addEventListener('click',()=>{ saida.value=''; contador.textContent='0 itens'; lastLines=[]; dlHint.classList.add('hidden'); });
 
     // Tema
     function applyTheme(mode){
       document.documentElement.classList.remove('theme-soft');
       if(mode==='soft') document.documentElement.classList.add('theme-soft');
-      else if(mode==='auto'){
-        const prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if(!prefersDark) document.documentElement.classList.add('theme-soft');
-      }
+      else if(mode==='auto'){ const prefersDark=window.matchMedia('(prefers-color-scheme: dark)').matches; if(!prefersDark) document.documentElement.classList.add('theme-soft'); }
     }
-    const saved=localStorage.getItem('theme-select')||'auto';
-    themeSelect.value=saved; applyTheme(saved);
+    const saved=localStorage.getItem('theme-select')||'auto'; themeSelect.value=saved; applyTheme(saved);
     themeSelect.addEventListener('change',()=>{ const v=themeSelect.value; localStorage.setItem('theme-select',v); applyTheme(v); });
-    (function(){ try{ if(inSandboxedIframe()){ const cb = byId('forceNewTab'); if (cb) cb.checked = true; } }catch{} })();
+    (function(){ try{ if(inSandboxedIframe()){ const cb=byId('forceNewTab'); if(cb) cb.checked=true; } }catch{} })();
 
     // Footer
     byId('ano').textContent=new Date().getFullYear();
 
-    // Privacidade
+    // Aviso privacidade
     const privacy=byId('privacy'); const privacyOk=byId('privacyOk');
     if(localStorage.getItem('privacy-ok')==='1') privacy.remove();
     privacyOk.addEventListener('click',()=>{ localStorage.setItem('privacy-ok','1'); privacy.remove(); });
