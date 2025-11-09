@@ -1,12 +1,8 @@
 {
   "redirects": [
     {
-      "source": "http://(.*)",
-      "destination": "https://www.gerardados.com.br/:splat",
-      "permanent": true
-    },
-    {
-      "source": "https://gerardados.com.br/(.*)",
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "gerardados.com.br" }],
       "destination": "https://www.gerardados.com.br/:splat",
       "permanent": true
     }
